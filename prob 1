@@ -1,0 +1,113 @@
+#include <stdio.h>
+
+struct vitamins_list_in_clinic {
+    int id;
+    float price_usd;
+    char vitamin_type;
+    double mg_of_specific_vitamin;
+};
+#define array_size 100
+union search_value {
+    int id;
+    float price_usd;
+    char vitamin_type;
+    double mg_of_specific_vitamin;
+};
+void read_elements(struct vitamins_list_in_clinic array[], int size) {
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < size; i++) {
+        printf("Element %d:\n", i + 1);
+        printf("  Enter id value: ");
+        scanf("%d", &array[i].id);
+        printf("  Enter price (USD): ");
+        scanf("%f", &array[i].price_usd);
+        printf("  Enter vitamin type: ");
+        scanf(" %c", &array[i].vitamin_type);
+        printf("  Enter mg of specific vitamin: ");
+        scanf("%lf", &array[i].mg_of_specific_vitamin);
+    }
+}
+void display_elements(struct vitamins_list_in_clinic array[], int size) {
+    printf("The elements of the array are:\n");
+    for (int i = 0; i < size; i++) {
+        printf("Element %d:\n", i + 1);
+        printf("  Id value: %d\n", array[i].id);
+        printf("  Price (USD): %.2f\n", array[i].price_usd);
+        printf("  Vitamin type: %c\n", array[i].vitamin_type);
+        printf("  Mg of specific vitamin: %.4lf\n", array[i].mg_of_specific_vitamin);
+    }
+}
+int search_element(struct vitamins_list_in_clinic array[], int size, union search_value value_to_find, int type) {
+    for (int i = 0; i < size; i++) {
+        switch(type) {
+            case 1:
+                if (array[i].id == value_to_find.id) {
+                    return i;
+                }
+                break;
+            case 2:
+                if (array[i].price_usd == value_to_find.price_usd) {
+                    return i;
+                }
+                break;
+            case 3:
+                if (array[i].vitamin_type == value_to_find.vitamin_type) {
+                    return i;
+                }
+                break;
+            case 4:
+                if (array[i].mg_of_specific_vitamin == value_to_find.mg_of_specific_vitamin) {
+                    return i;
+                }
+                break;
+            default:
+                return -1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    struct vitamins_list_in_clinic array[array_size];
+    int size;
+    printf("Enter the size of the array (max %d): ", array_size);
+    scanf("%d", &size);
+    if (size > array_size || size <= 0) {
+        printf("Invalid size!\n");
+        return 1;
+    }
+    read_elements(array, size);
+    display_elements(array, size);
+    union search_value value_to_search;
+    int search_type;
+    printf("Enter the type of value to search for (1: id, 2: price (USD), 3: vitamin type, 4: mg of specific vitamin): ");
+    scanf("%d", &search_type);
+    switch(search_type) {
+        case 1:
+            printf("Enter the id value you want to search for: ");
+            scanf("%d", &value_to_search.id);
+            break;
+        case 2:
+            printf("Enter the price (USD) value you want to search for: ");
+            scanf("%f", &value_to_search.price_usd);
+            break;
+        case 3:
+            printf("Enter the vitamin type you want to search for: ");
+            scanf(" %c", &value_to_search.vitamin_type);
+            break;
+        case 4:
+            printf("Enter the mg of specific vitamin value you want to search for: ");
+            scanf("%lf", &value_to_search.mg_of_specific_vitamin);
+            break;
+        default:
+            printf("Invalid search type!\n");
+            return 1;
+    }
+    int position = search_element(array, size, value_to_search, search_type);
+    if (position != -1) {
+        printf("The element was found at position %d.\n", position);
+    } else {
+        printf("The element was not found.\n");
+    }
+    return 0;
+}
